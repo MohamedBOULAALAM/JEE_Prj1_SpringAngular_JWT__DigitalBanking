@@ -2,6 +2,12 @@ package tech.mobl3lm.digitalbanking;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import java.util.Date;
+import java.util.UUID;
+import java.util.stream.Stream;
+
 import tech.mobl3lm.digitalbanking.entities.AccountOperation;
 import tech.mobl3lm.digitalbanking.entities.CurrentAccount;
 import tech.mobl3lm.digitalbanking.entities.Customer;
@@ -11,11 +17,8 @@ import tech.mobl3lm.digitalbanking.enums.OperationType;
 import tech.mobl3lm.digitalbanking.repositories.AccountOperationRepository;
 import tech.mobl3lm.digitalbanking.repositories.BankAccountRepository;
 import tech.mobl3lm.digitalbanking.repositories.CustomerRepository;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import java.util.Date;
-import java.util.UUID;
-import java.util.stream.Stream;
+import tech.mobl3lm.digitalbanking.servises.BankService;
+
 
 
 @SpringBootApplication
@@ -25,6 +28,12 @@ public class DigitalBankingApplication {
     }
 
     @Bean
+    CommandLineRunner commandLineRunner(BankService bankService){
+        return args -> {
+            bankService.consulter();
+        };
+    }
+
     CommandLineRunner commandLineRunner(
             CustomerRepository customerRepository,
             BankAccountRepository bankAccountRepository,
@@ -71,5 +80,4 @@ public class DigitalBankingApplication {
             });
         };
     }
-
 }
