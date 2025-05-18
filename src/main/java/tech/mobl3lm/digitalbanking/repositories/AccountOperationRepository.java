@@ -1,13 +1,12 @@
 package tech.mobl3lm.digitalbanking.repositories;
 
-import tech.mobl3lm.digitalbanking.entities.AccountOperation;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import tech.mobl3lm.digitalbanking.entities.BankAccount;
+import tech.mobl3lm.digitalbanking.entities.Operation;
 import java.util.List;
 
-public interface AccountOperationRepository extends JpaRepository<AccountOperation,Long> {
-    List<AccountOperation> findByBankAccountId(String accountId);
-    Page<AccountOperation> findByBankAccountIdOrderByOperationDateDesc(String accountId, Pageable pageable);
+@Repository
+public interface AccountOperationRepository extends JpaRepository<Operation,Long> {
+    List<Operation> findByBankAccount(BankAccount bankAccount);
 }

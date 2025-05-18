@@ -1,22 +1,23 @@
 package tech.mobl3lm.digitalbanking.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import tech.mobl3lm.digitalbanking.enums.OperationType;
 
 import java.util.Date;
+@Getter
+@Setter
 @Entity
-@Data @NoArgsConstructor @AllArgsConstructor
-public class AccountOperation {
+@Data
+@AllArgsConstructor @NoArgsConstructor
+public class Operation {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date operationDate;
+    private OperationType operationType;
     private double amount;
-    @Enumerated(EnumType.STRING)
-    private OperationType type;
-    @ManyToOne
+    private Date operationDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idBankAccount")
     private BankAccount bankAccount;
-    private String description;
 }

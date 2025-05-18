@@ -2,15 +2,18 @@ package tech.mobl3lm.digitalbanking.entities;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 
+@EqualsAndHashCode(callSuper = true) // ✅ inclut les champs de BankAccount
+@SuperBuilder
 @Entity
-// l'heritage
-@DiscriminatorValue("SA")
-@Data @NoArgsConstructor @AllArgsConstructor
-public class SavingAccount extends BankAccount {
+@Getter
+@Setter
+@Data
+@DiscriminatorValue("SAV")
+@AllArgsConstructor @NoArgsConstructor
+public class SavingAccount  extends  BankAccount{
     private double interestRate;
 }

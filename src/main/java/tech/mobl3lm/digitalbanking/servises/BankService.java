@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 @Service
 @Transactional
 public class BankService {
@@ -30,7 +32,7 @@ public class BankService {
                 System.out.println("Rate=>" + ((SavingAccount) bankAccount).getInterestRate());
             }
             bankAccount.getAccountOperations().forEach(op -> {
-                System.out.println(op.getType() + "\t" + op.getOperationDate() + "\t" + op.getAmount());
+                System.out.println(op.getOperationType() + "\t" + op.getOperationDate() + "\t" + op.getAmount());
             });
         }
     }
