@@ -8,6 +8,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Data
+@Builder
 @AllArgsConstructor @NoArgsConstructor
 public class Operation {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

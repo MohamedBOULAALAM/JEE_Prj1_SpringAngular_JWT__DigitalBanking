@@ -3,15 +3,11 @@ package tech.mobl3lm.digitalbanking;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import tech.mobl3lm.digitalbanking.entities.CurrentAccount;
-import tech.mobl3lm.digitalbanking.entities.Customer;
-import tech.mobl3lm.digitalbanking.entities.SavingAccount;
+import tech.mobl3lm.digitalbanking.entities.*;
 import tech.mobl3lm.digitalbanking.enums.AccountStatus;
 import tech.mobl3lm.digitalbanking.repositories.AccountOperationRepository;
 import tech.mobl3lm.digitalbanking.repositories.BankAccountRepository;
 import tech.mobl3lm.digitalbanking.repositories.CustomerRepository;
-
 
 @SpringBootApplication
 public class DigitalBankingApplication {
