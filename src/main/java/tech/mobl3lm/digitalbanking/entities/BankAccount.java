@@ -31,7 +31,7 @@ import java.util.List;
 @NoArgsConstructor
 public abstract class BankAccount {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private double balance;
     private AccountStatus status;
     private String currency;

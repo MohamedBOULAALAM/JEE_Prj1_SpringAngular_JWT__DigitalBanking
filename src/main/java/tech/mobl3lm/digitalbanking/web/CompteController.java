@@ -1,13 +1,13 @@
 package tech.mobl3lm.digitalbanking.web;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import tech.mobl3lm.digitalbanking.entities.BankAccount;
-import tech.mobl3lm.digitalbanking.servises.CustomerService;
+import tech.mobl3lm.digitalbanking.dtos.*;
+import tech.mobl3lm.digitalbanking.exceptions.*;
+import tech.mobl3lm.digitalbanking.servises.*;
 import java.util.List;
 
-@Controller
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/comptes")
 public class CompteController {
@@ -20,40 +20,53 @@ public class CompteController {
 
     // GET /comptes — lister tous les comptes
     @GetMapping
-    public List<BankAccount> getAllAccounts() {
-        return customerService.getAllAccounts();
+    public ResponseEntity<List<BankAccountDTO>> getAllAccounts() {
+        return ResponseEntity.ok(customerService.getAllAccounts());
     }
 
     // GET /comptes/{id} — afficher un compte spécifique
     @GetMapping("/{id}")
-    public ResponseEntity<BankAccount> getAccountById(@PathVariable String id) {
-        BankAccount account = customerService.getAccount(id);
-        return account != null ? ResponseEntity.ok(account) : ResponseEntity.notFound().build();
+    public ResponseEntity<BankAccountDTO> getAccountById(@PathVariable String id) {
+        try {
+            BankAccountDTO account = customerService.getAccount(id);
+            return ResponseEntity.ok(account);
+        } catch (BankAccountNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // POST /clients/{clientId}/comptes — créer un compte pour un client
-    @PostMapping("/clients/{clientId}/comptes")
-    public ResponseEntity<BankAccount> createAccountForCustomer(@PathVariable Long clientId, @RequestBody BankAccount account) {
-        try{
-            BankAccount newAccount = customerService.createAccountForCustomer(clientId, account);
-            return ResponseEntity.ok(newAccount);
-        }
-        catch(Exception e){
+    // POST /comptes — créer un compte (using DTO)
+    @PostMapping
+    public ResponseEntity<BankAccountDTO> createAccount(@RequestBody BankAccountRequestDTO accountDTO) {
+        try {
+            BankAccountDTO createdAccount = customerService.createAccount(accountDTO);
+            return ResponseEntity.ok(createdAccount);
+        } catch (CustomerNotFoundException e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     // PUT /comptes/{id} — modifier un compte
     @PutMapping("/{id}")
-    public ResponseEntity<BankAccount> updateAccount(@PathVariable String id, @RequestBody BankAccount updatedAccount) {
-        BankAccount account = customerService.updateAccount(id, updatedAccount);
-        return account != null ? ResponseEntity.ok(account) : ResponseEntity.notFound().build();
+    public ResponseEntity<BankAccountDTO> updateAccount(
+            @PathVariable String id,
+            @RequestBody BankAccountDTO bankAccountDTO) {
+        try {
+            BankAccountDTO updatedAccount = customerService.updateAccount(id, bankAccountDTO);
+            return ResponseEntity.ok(updatedAccount);
+        } catch (BankAccountNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // DELETE /comptes/{id} — supprimer un compte
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable String id) {
-        boolean deleted = customerService.deleteAccount(id);
-        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        try {
+            customerService.deleteAccount(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
