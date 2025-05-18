@@ -1,5 +1,7 @@
 package tech.mobl3lm.digitalbanking.entities;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -14,10 +16,19 @@ import java.util.List;
 @Data
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type",length = 4)
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = SavingAccount.class, name = "SAV"),
+        @JsonSubTypes.Type(value = CurrentAccount.class, name = "CUR")
+})
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class BankAccount {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

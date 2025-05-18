@@ -5,6 +5,9 @@ import tech.mobl3lm.digitalbanking.entities.BankAccount;
 import tech.mobl3lm.digitalbanking.entities.Customer;
 import tech.mobl3lm.digitalbanking.entities.Operation;
 import tech.mobl3lm.digitalbanking.enums.OperationType;
+import tech.mobl3lm.digitalbanking.exceptions.BankAccountNotFoundException;
+import tech.mobl3lm.digitalbanking.exceptions.CustomerNotFoundException;
+import tech.mobl3lm.digitalbanking.exceptions.InsufficientBalanceException;
 import tech.mobl3lm.digitalbanking.repositories.AccountOperationRepository;
 import tech.mobl3lm.digitalbanking.repositories.BankAccountRepository;
 import tech.mobl3lm.digitalbanking.repositories.CustomerRepository;
@@ -36,7 +39,8 @@ public class CustomerService  implements CustomerServiceinterface{
     }
 
     public Customer getClientById(Long id) {
-        return customerRepo.findById(id).orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
+        return customerRepo.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + id));
     }
 
     public Customer createClient(Customer customer) {
@@ -68,7 +72,8 @@ public class CustomerService  implements CustomerServiceinterface{
 
     public BankAccount getAccount(String id) {
         return bankAccountRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Account not found with id: " + id));
+                .orElseThrow(() -> new BankAccountNotFoundException("Account not found with id: " + id));
+
     }
 
     public BankAccount createAccountForCustomer(Long clientId, BankAccount account) {
@@ -96,7 +101,8 @@ public class CustomerService  implements CustomerServiceinterface{
 
     public void debit(String id, double amount, String description) {
         BankAccount account = getAccount(id);
-        if (account.getBalance() < amount) throw new RuntimeException("Insufficient balance");
+        if (account.getBalance() < amount)
+            throw new InsufficientBalanceException("Insufficient balance for account ID: " + id);
         account.setBalance(account.getBalance() - amount);
         Operation operation = new Operation();
         operation.setAmount(amount);
@@ -119,6 +125,10 @@ public class CustomerService  implements CustomerServiceinterface{
 
     public List<Operation> getAccountOperations(String id) {
         BankAccount account = getAccount(id);
-        return operationRepo.findByBankAccount(account);
+        List<Operation> operations = operationRepo.findByBankAccount(account);
+        if (operations.isEmpty()) {
+            throw new BankAccountNotFoundException("Account not found with id: " + id);
+        }
+        return operations;
     }
 }

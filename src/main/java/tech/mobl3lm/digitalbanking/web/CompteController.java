@@ -34,8 +34,13 @@ public class CompteController {
     // POST /clients/{clientId}/comptes — créer un compte pour un client
     @PostMapping("/clients/{clientId}/comptes")
     public ResponseEntity<BankAccount> createAccountForCustomer(@PathVariable Long clientId, @RequestBody BankAccount account) {
-        BankAccount newAccount = customerService.createAccountForCustomer(clientId, account);
-        return ResponseEntity.ok(newAccount);
+        try{
+            BankAccount newAccount = customerService.createAccountForCustomer(clientId, account);
+            return ResponseEntity.ok(newAccount);
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     // PUT /comptes/{id} — modifier un compte
