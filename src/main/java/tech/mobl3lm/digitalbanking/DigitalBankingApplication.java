@@ -22,10 +22,10 @@ public class DigitalBankingApplication {
         return args -> {
             for (int i = 0; i < 10; i++) {
                 Customer customer = Customer.builder()
-                        .phone("0654823654"+"000"+i)
-                        .email(i+"abc@gmail.com")
-                        .city("Mohammedia"+i)
-                        .name("youssef"+i)
+                        .phone("05552638"+"121"+i)
+                        .email(i+"MedB@mhmd.n7")
+                        .city("Zazat"+i)
+                        .name("MohamedB"+i)
                         .build();
                 customerRepo.save(customer);
                 if(i%2==0)
