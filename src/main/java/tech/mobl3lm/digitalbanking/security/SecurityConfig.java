@@ -46,7 +46,7 @@ public class SecurityConfig {
         PasswordEncoder passwordEncoder = passwordEncoder();
         return new InMemoryUserDetailsManager(
                 User.withUsername("user").password(passwordEncoder().encode("12345")).authorities("USER").build(),
-                User.withUsername("admin").password(passwordEncoder().encode("12345")).authorities("USER","ADMIN").build()
+                User.withUsername("Xadmin").password(passwordEncoder().encode("12345")).authorities("USER","ADMIN").build()
         );
     }
     @Bean
